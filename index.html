@@ -1,0 +1,299 @@
+```html
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMOKE & VAPE SHOP | Премиум Каталог</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0D0D0D',
+                            dark: '#161616',
+                            card: '#202020',
+                            border: '#333333',
+                            orange: '#FF6600',
+                            orangeHover: '#E65C00',
+                            orangeLight: '#FF8533'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0D0D0D;
+            color: #E5E7EB;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #161616;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF6600;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-gray-200 min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-brand-dark/95 backdrop-blur border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('shop')">
+                <div class="bg-brand-orange text-black p-2 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-orange/20">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <span class="text-lg sm:text-xl font-extrabold tracking-wider text-white uppercase">VAPE<span class="text-brand-orange">&</span>SMOKE</span>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3">
+                <button onclick="switchTab('shop')" id="nav-shop-btn" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-brand-orange bg-brand-orange/10 border border-brand-orange/30">
+                    <i class="fa-solid fa-store mr-1.5"></i>Каталог
+                </button>
+
+                <button onclick="openCartModal()" class="relative p-2.5 rounded-xl text-gray-300 hover:text-white bg-brand-card hover:bg-brand-border transition-all border border-brand-border">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-brand-orange text-black font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <button onclick="openAdminAuthModal()" id="nav-admin-btn" class="px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-gray-400 hover:text-white bg-brand-card hover:bg-brand-border transition-all border border-brand-border">
+                    <i class="fa-solid fa-user-shield mr-1.5"></i><span id="admin-btn-text">Админка</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        
+        <!-- SHOP VIEW -->
+        <section id="view-shop" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-brand-dark via-brand-card to-brand-black border border-brand-border p-6 sm:p-8 shadow-2xl">
+                <div class="relative z-10 max-w-2xl space-y-2">
+                    <span class="px-3 py-1 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-[10px] font-bold uppercase rounded-full tracking-wider">Синхронизация в реальном времени</span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">Премиум Табачные Изделия & VAPE</h1>
+                    <p class="text-gray-400 text-xs sm:text-sm">Оригинальная продукция, выбор вкусов и быстрая обработка заказов.</p>
+                </div>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-center bg-brand-dark p-4 rounded-xl border border-brand-border">
+                <div class="relative w-full sm:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-500 text-xs"></i>
+                    <input type="text" id="search-input" oninput="renderShopProducts()" placeholder="Поиск товара или вкуса..." class="w-full bg-brand-black border border-brand-border rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-brand-orange">
+                </div>
+                <div class="text-xs text-gray-400 flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span>Прямое подключение к серверу</span>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Dynamically Rendered -->
+            </div>
+            
+            <div id="no-products-msg" class="hidden text-center py-16 text-gray-500 space-y-2">
+                <i class="fa-solid fa-box-open text-4xl text-gray-600"></i>
+                <p class="text-sm font-medium">Товары не найдены или пока не добавлены.</p>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL VIEW -->
+        <section id="view-admin" class="hidden space-y-6">
+            <!-- Top Admin Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-brand-dark p-5 rounded-2xl border border-brand-border gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-brand-orange"></i> Управление Магазином
+                    </h2>
+                    <p class="text-xs text-gray-400">Управляйте каталогом, реквизитами, Telegram и заказами</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openAddProductModal()" class="px-4 py-2 bg-brand-orange hover:bg-brand-orangeHover text-black font-bold text-xs rounded-xl transition-all shadow-lg shadow-brand-orange/20 flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Добавить товар
+                    </button>
+                    <button onclick="logoutAdmin()" class="px-3 py-2 bg-red-900/20 hover:bg-red-900/40 text-red-400 border border-red-800/30 text-xs font-semibold rounded-xl">
+                        <i class="fa-solid fa-right-from-bracket"></i> Выход
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Sub-Tabs -->
+            <div class="flex space-x-2 border-b border-brand-border pb-1 overflow-x-auto">
+                <button id="admin-tab-products-btn" onclick="switchAdminTab('products')" class="px-4 py-2 border-b-2 font-bold text-xs border-brand-orange text-brand-orange whitespace-nowrap">
+                    <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Товары (<span id="admin-products-count">0</span>)
+                </button>
+                <button id="admin-tab-orders-btn" onclick="switchAdminTab('orders')" class="px-4 py-2 border-b-2 font-bold text-xs border-transparent text-gray-400 hover:text-white whitespace-nowrap">
+                    <i class="fa-solid fa-receipt mr-1.5"></i> Заказы (<span id="admin-orders-count">0</span>)
+                </button>
+                <button id="admin-tab-settings-btn" onclick="switchAdminTab('settings')" class="px-4 py-2 border-b-2 font-bold text-xs border-transparent text-gray-400 hover:text-white whitespace-nowrap">
+                    <i class="fa-solid fa-gear mr-1.5"></i> Оплата & Telegram
+                </button>
+            </div>
+
+            <!-- Tab 1: Products -->
+            <div id="admin-tab-products" class="space-y-4">
+                <div id="admin-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Tab 2: Orders -->
+            <div id="admin-tab-orders" class="hidden space-y-4">
+                <div id="admin-orders-list" class="space-y-4"></div>
+            </div>
+
+            <!-- Tab 3: Settings -->
+            <div id="admin-tab-settings" class="hidden bg-brand-dark p-6 rounded-2xl border border-brand-border space-y-5 max-w-2xl">
+                <h3 class="text-lg font-bold text-white border-b border-brand-border pb-3">Настройки Оплаты и Telegram</h3>
+                
+                <form id="settings-form" onsubmit="saveShopSettings(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Telegram Юзернейм Продавца (без @)</label>
+                        <input type="text" id="setting-telegram-username" required placeholder="например: seller_vape" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-orange text-xs">
+                        <p class="text-[11px] text-gray-500 mt-1">Отображается покупателю ПОСЛЕ вашего подтверждения оплаты.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Банковские реквизиты для перевода</label>
+                        <textarea id="setting-payment-details" rows="3" required placeholder="Карта: 0000 0000 0000 0000 (Банк)&#10;СБП: +7 (900) 000-00-00" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-orange text-xs"></textarea>
+                    </div>
+
+                    <div class="pt-3 border-t border-brand-border space-y-3">
+                        <h4 class="text-sm font-bold text-brand-orange flex items-center gap-1.5"><i class="fa-brands fa-telegram"></i> Telegram Bot Уведомления</h4>
+                        
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-1">Telegram Bot Token</label>
+                            <input type="text" id="setting-bot-token" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-orange text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-400 mb-1">Telegram Chat ID (Ваш ID)</label>
+                            <input type="text" id="setting-chat-id" placeholder="123456789" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-orange text-xs">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-2.5 bg-brand-orange hover:bg-brand-orangeHover text-black font-bold text-xs rounded-xl shadow-lg shadow-brand-orange/20">
+                        Сохранить настройки
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- 1. Two-Step Auth Modal for Admin -->
+    <div id="modal-admin-auth" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-brand-dark border border-brand-border w-full max-w-md rounded-2xl p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeModal('modal-admin-auth')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <div class="text-center space-y-1">
+                <div class="inline-flex p-3 bg-brand-orange/10 text-brand-orange rounded-full mb-1 border border-brand-orange/30">
+                    <i class="fa-solid fa-lock text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Вход в панель администратора</h3>
+                <p id="auth-step-subtitle" class="text-xs text-gray-400">Шаг 1 из 2: Введите пароль доступа</p>
+            </div>
+
+            <!-- Step 1: Password -->
+            <form id="auth-form-step1" onsubmit="handleAuthStep1(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Пароль</label>
+                    <input type="password" id="auth-password" required placeholder="Введите пароль..." class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white focus:outline-none focus:border-brand-orange text-sm">
+                </div>
+                <div id="auth-error-1" class="hidden text-xs text-red-400 bg-red-900/20 p-2 rounded-lg border border-red-800/30 text-center font-medium"></div>
+                <button type="submit" class="w-full py-2.5 bg-brand-orange hover:bg-brand-orangeHover text-black font-bold text-xs rounded-xl shadow-lg shadow-brand-orange/20">
+                    Далее <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </form>
+
+            <!-- Step 2: PIN Code -->
+            <form id="auth-form-step2" onsubmit="handleAuthStep2(event)" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">ПИН-Код (4 цифры)</label>
+                    <input type="password" maxlength="4" id="auth-pin" required placeholder="****" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-white text-center tracking-widest font-bold text-lg focus:outline-none focus:border-brand-orange">
+                </div>
+                <div id="auth-error-2" class="hidden text-xs text-red-400 bg-red-900/20 p-2 rounded-lg border border-red-800/30 text-center font-medium"></div>
+                <button type="submit" class="w-full py-2.5 bg-brand-orange hover:bg-brand-orangeHover text-black font-bold text-xs rounded-xl shadow-lg shadow-brand-orange/20">
+                    Подтвердить и войти
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Cart & Checkout Modal -->
+    <div id="modal-cart" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-brand-dark border border-brand-border w-full max-w-2xl rounded-2xl p-6 shadow-2xl relative space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-brand-border pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-brand-orange"></i> Корзина покупок
+                </h3>
+                <button onclick="closeModal('modal-cart')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Step 1: Cart Items -->
+            <div id="cart-step-items" class="flex-grow overflow-y-auto space-y-3 pr-1">
+                <div id="cart-items-container" class="space-y-2"></div>
+                <div id="cart-empty-msg" class="text-center py-12 text-gray-500 space-y-2">
+                    <i class="fa-solid fa-cart-arrow-down text-3xl"></i>
+                    <p class="text-xs">Ваша корзина пуста</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Checkout Form & Payment -->
+            <div id="cart-step-checkout" class="hidden flex-grow overflow-y-auto space-y-4 pr-1">
+                <div class="bg-brand-black p-3.5 rounded-xl border border-brand-border space-y-1.5">
+                    <span class="text-xs font-bold text-brand-orange uppercase">Банковские реквизиты продавца:</span>
+                    <div id="checkout-payment-details" class="bg-brand-card p-2.5 rounded-lg text-xs text-brand-orange font-mono whitespace-pre-line border border-brand-border select-all"></div>
+                </div>
+
+                <form id="checkout-form" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-1">Имя / Никнейм *</label>
+                        <input type="text" id="checkout-name" required placeholder="Иван" class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-orange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-1">Контакт для связи (Telegram / Телефон) *</label>
+                        <input type="text" id="checkout-contact" required placeholder="@username или +7..." class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-orange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 mb-1">Прикрепить чек оплаты (Фото или Файл) *</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="checkout-receipt-url" placeholder="Вставьте ссылку на чек или загрузите файл..." class="w-full bg-brand-black border border-brand-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-orange">
+                            <label class="bg-brand-card hover:bg-brand-border border border-brand-border px-3 py-2 rounded-xl cursor-pointer flex items-center text-xs text-gray-300 font-semibold whitespace-nowrap">
+                                <i class="fa-solid fa-paperclip mr-1 text-brand-orange"></i>Файл
+                                <input type="file" id="checkout-receipt-file" accept="image/*" class="hidden" onchange="handleFileSelect(this)">
+                            </label>
+                        </div>
+                        <p id="file-selected-name" class="text-[11px] text-brand-orange mt-1 hidden"></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="border-t border-brand-border pt-3 flex justify-between items-center gap-3">
+                <div class="text-base font-bold text-white">
+                    Итого: <span id="cart-total-price" class="text-brand-orange">0 ₽</span>
+                </div>
+
+                <div class="flex space-x-2">
+                    <button id="cart-back-btn" onclick="toggleCartCheckoutStep(false)" class="hidden px-4 py-2 bg-brand-card hover:bg-brand-border text-white text-xs font-semibold rounded-xl border border-brand-border">
+                        Назад
+                    </button>
+                    <button id="cart-next-btn" onclick="toggleCartCheckoutStep(true)" class="px-5 py-2 bg-brand-orange hover:bg-brand-orangeHover text-black font-bold text-xs rounded-xl shadow-lg shadow-brand-orange/20">
+                        Оплатить заказ
